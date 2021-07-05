@@ -13,6 +13,11 @@ func TestFizzBuzz_WhenLimitIsLessThanOne_ThenReturnEmptySlice(t *testing.T) {
 	assert.Empty(t, result, fmt.Sprintf("Expected empty slice - got %v", fmt.Sprintf("%v", result)))
 }
 
+func TestFizzBuzz_WhenLimitIsNotLessThanOne_AndOtherArgumentsAreValid_ThenDoNotReturnEmptySlice(t *testing.T) {
+	result := fizzBuzz.FizzBuzz(1, 1, 1, "", "")
+	assert.NotEmpty(t, result, fmt.Sprintf("Expected non-empty slice - got %v", fmt.Sprintf("%v", result)))
+}
+
 func TestFizzBuzz_WhenInt1orInt2IsZero_ThenReturnEmptySlice(t *testing.T) {
 	var result []string
 
@@ -24,4 +29,13 @@ func TestFizzBuzz_WhenInt1orInt2IsZero_ThenReturnEmptySlice(t *testing.T) {
 
 	result = fizzBuzz.FizzBuzz(0, 1, 1, "", "")
 	assert.Empty(t, result, fmt.Sprintf("Expected empty slice - got %v", fmt.Sprintf("%v", result)))
+}
+
+func TestFizzBuzz_ReplaceMultiplesOfInt1WithStr1(t *testing.T) {
+	var expectedResult = fmt.Sprintf("%v", []string{"-1"})
+
+	result := fizzBuzz.FizzBuzz(1, 1, 1, "-1", "")
+
+	resultString := fmt.Sprintf("%v", result)
+	assert.Equalf(t, expectedResult, resultString, "Expected %s - got %s", expectedResult, resultString)
 }
