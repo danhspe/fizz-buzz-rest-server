@@ -18,3 +18,15 @@ func FizzBuzz(int1 uint, int2 uint, limit uint, str1 string, str2 string) []stri
 
 	return result
 }
+
+func numberIsDivisibleOnlyByInt1(number uint, int1 uint, int2 uint) bool {
+	return number%int1 == 0 && number%int2 != 0
+}
+
+func numberIsDivisibleOnlyByInt2(number uint, int1 uint, int2 uint) bool {
+	return number%int1 != 0 && number%int2 == 0
+}
+
+func numberIsDivisibleByInt1AndInt2(number uint, int1 uint, int2 uint) bool {
+	return number%int1 == 0 && number%int2 == 0
+}
