@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/danhspe/fizz-buzz-rest-server/fizzBuzz"
 	"github.com/stretchr/testify/assert"
-	"github.io/fizz-buzz-rest-server/fizzBuzz"
 )
 
 type args struct {

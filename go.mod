@@ -1,4 +1,4 @@
-module github.io/fizz-buzz-rest-server
+module github.com/danhspe/fizz-buzz-rest-server
 
 go 1.16
 
