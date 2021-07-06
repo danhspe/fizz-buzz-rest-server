@@ -14,11 +14,19 @@ func FizzBuzz(int1 uint, int2 uint, limit uint, str1 string, str2 string) []stri
 
 	for i := uint(1); i <= limit; i++ {
 		replacement := strconv.Itoa(int(i))
-		if numberIsDivisibleOnlyByInt1(i, int1, int2) {
+
+		numberIsDivisibleByInt1 := isDivisibleBy(i, int1)
+		numberIsDivisibleByInt2 := isDivisibleBy(i, int2)
+
+		numberIsDivisibleOnlyByInt1 := numberIsDivisibleByInt1 && !numberIsDivisibleByInt2
+		numberIsDivisibleOnlyByInt2 := !numberIsDivisibleByInt1 && numberIsDivisibleByInt2
+		numberIsDivisibleByInt1AndInt2 := numberIsDivisibleByInt1 && numberIsDivisibleByInt2
+
+		if numberIsDivisibleOnlyByInt1 {
 			replacement = str1
-		} else if numberIsDivisibleOnlyByInt2(i, int1, int2) {
+		} else if numberIsDivisibleOnlyByInt2 {
 			replacement = str2
-		} else if numberIsDivisibleByInt1AndInt2(i, int1, int2) {
+		} else if numberIsDivisibleByInt1AndInt2 {
 			replacement = str1 + str2
 		}
 		result = append(result, replacement)
@@ -27,14 +35,10 @@ func FizzBuzz(int1 uint, int2 uint, limit uint, str1 string, str2 string) []stri
 	return result
 }
 
-func numberIsDivisibleOnlyByInt1(number uint, int1 uint, int2 uint) bool {
-	return number%int1 == 0 && number%int2 != 0
-}
-
-func numberIsDivisibleOnlyByInt2(number uint, int1 uint, int2 uint) bool {
-	return number%int1 != 0 && number%int2 == 0
-}
-
-func numberIsDivisibleByInt1AndInt2(number uint, int1 uint, int2 uint) bool {
-	return number%int1 == 0 && number%int2 == 0
+// Returns true if the remainder of dividend/divisor is zero, false otherwise.
+func isDivisibleBy(dividend uint, divisor uint) bool {
+	if divisor == 0 {
+		return false
+	}
+	return dividend%divisor == 0
 }
