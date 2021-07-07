@@ -9,9 +9,9 @@ import (
 )
 
 type args struct {
-	int1  uint
-	int2  uint
-	limit uint
+	int1  int
+	int2  int
+	limit int
 	str1  string
 	str2  string
 }
@@ -26,7 +26,7 @@ func TestFizzBuzz_WhenLimitIsNotLessThanOne_AndOtherArgumentsAreValid_ThenDoNotR
 	assert.NotEmpty(t, result, fmt.Sprintf("Expected non-empty slice - got %v", fmt.Sprintf("%v", result)))
 }
 
-func TestFizzBuzz_WhenInt1orInt2IsZero_ThenReturnEmptySlice(t *testing.T) {
+func TestFizzBuzz_WhenInt1orInt2IsLessThenOne_ThenReturnEmptySlice(t *testing.T) {
 	var result []string
 
 	result = fizzBuzz.FizzBuzz(0, 0, 1, "", "")

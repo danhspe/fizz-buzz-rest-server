@@ -8,8 +8,8 @@ import (
 )
 
 type args struct {
-	dividend uint
-	divisor  uint
+	dividend int
+	divisor  int
 	result   bool
 }
 
