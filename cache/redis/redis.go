@@ -75,11 +75,15 @@ func (c *redisCache) SortedSetScore(key string, member string) (float64, error) 
 	return result, err
 }
 
-// SortedSetRangeWithScores returns the members with indices from start to stop sorted by score.
+// SortedSetRangeWithScores returns the members with indices from start to stop sorted by score; returns nil on error.
 // Returns only the last member in the sorted set when start and stop is set to -1.
 func (c *redisCache) SortedSetRangeWithScores(key string, start int64, stop int64) (map[string]int, error) {
 	zSliceCmd := c.client.ZRangeWithScores(c.ctx, key, start, stop)
 	result, err := zSliceCmd.Result()
+	if err != nil {
+		log.Printf("ZRangeWithScores failed: %s", err.Error())
+		return nil, err
+	}
 	log.Printf("ZRangeWithScores result: %+v", result)
 
 	entries := make(map[string]int)
@@ -94,7 +98,7 @@ func (c *redisCache) SortedSetRangeWithScores(key string, start int64, stop int6
 	return entries, err
 }
 
-// SortedSetRangeByScoreWithScores returns the members with scores between min and max.
+// SortedSetRangeByScoreWithScores returns the members with scores between min and max; returns nil on error.
 func (c *redisCache) SortedSetRangeByScoreWithScores(key string, min string, max string) (map[string]int, error) {
 	stringSliceCmd := c.client.ZRangeByScoreWithScores(c.ctx, key, &redis.ZRangeBy{
 		Min:    min,
@@ -103,6 +107,10 @@ func (c *redisCache) SortedSetRangeByScoreWithScores(key string, min string, max
 		Count:  0,
 	})
 	result, err := stringSliceCmd.Result()
+	if err != nil {
+		log.Printf("ZRangeByScoreWithScores failed: %s", err.Error())
+		return nil, err
+	}
 	log.Printf("ZRangeByScoreWithScores result: %+v", result)
 
 	entries := make(map[string]int)
