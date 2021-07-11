@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/danhspe/fizz-buzz-rest-server/cache"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/cache"
 	"github.com/go-redis/redis/v8"
 )
 

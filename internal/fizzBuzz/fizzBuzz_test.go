@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/danhspe/fizz-buzz-rest-server/fizzBuzz"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/fizzBuzz"
 	"github.com/stretchr/testify/assert"
 )
 

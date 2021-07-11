@@ -4,8 +4,8 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/danhspe/fizz-buzz-rest-server/cache"
-	"github.com/danhspe/fizz-buzz-rest-server/statistics"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/cache"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/statistics"
 )
 
 type summary struct {
