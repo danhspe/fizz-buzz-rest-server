@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package statistics;
+
+option go_package = "github.com/danhspe/fizz-buzz-rest-server/golib/fizzbuzz";
+
+import "fizzbuzz.proto";
+
+message StatisticsResponse {
+  int64 highest_score = 1;
+  repeated fizzbuzz.FizzBuzzRequest requests = 2;
+}
