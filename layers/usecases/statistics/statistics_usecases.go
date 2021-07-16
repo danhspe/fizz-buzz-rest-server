@@ -1,18 +1,20 @@
 package statistics
 
 import (
-	"github.com/danhspe/fizz-buzz-rest-server/internal/statistics"
+	"log"
+
+	"github.com/danhspe/fizz-buzz-rest-server/layers/repositories"
 	"github.com/danhspe/fizz-buzz-rest-server/layers/usecases"
 	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
 )
 
 type statisticsUseCases struct {
-	statistics statistics.Statistics
+	statistics repositories.Statistics
 }
 
 var _ usecases.Statistics = (*statisticsUseCases)(nil)
 
-func NewStatisticsUseCases(statistics statistics.Statistics) usecases.Statistics {
+func NewStatisticsUseCases(statistics repositories.Statistics) usecases.Statistics {
 	return &statisticsUseCases{statistics: statistics}
 }
 
@@ -20,13 +22,19 @@ func (s *statisticsUseCases) GetStatistics() (highestScore int, mostFrequentArgu
 
 	highestScore, _ = s.statistics.HighestScore()
 
-	_, _ = s.statistics.MostFrequentEntriesWithScores()
+	argumentsWithScores, err := s.statistics.MostFrequentEntriesWithScores()
+	if err != nil {
+		log.Printf("GetStatistics error: %s\n", err.Error())
+	}
 
-	return highestScore, []arguments.Arguments{{
-		Int1:  3,
-		Int2:  5,
-		Limit: 100,
-		Str1:  "Fizz",
-		Str2:  "Buzz",
-	}}
+	argumentsList := make([]arguments.Arguments, 0)
+	for argument, score := range argumentsWithScores {
+		if score != highestScore {
+			log.Printf("Highest score %d does not match arguments score: %d\n", highestScore, score)
+		} else {
+			argumentsList = append(argumentsList, argument)
+		}
+	}
+
+	return highestScore, argumentsList
 }
