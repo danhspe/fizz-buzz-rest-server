@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
-	"github.com/danhspe/fizz-buzz-rest-server/models/storage"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
+	"github.com/danhspe/fizz-buzz-rest-server/obsolete/storage"
 )
 
 func TestNew(t *testing.T) {

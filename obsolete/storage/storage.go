@@ -3,8 +3,8 @@ package storage
 import (
 	"sync"
 
-	"github.com/danhspe/fizz-buzz-rest-server/models/argumentStore"
 	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
+	"github.com/danhspe/fizz-buzz-rest-server/obsolete/argumentStore"
 )
 
 type Storage struct {
