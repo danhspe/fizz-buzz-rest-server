@@ -3,7 +3,6 @@ package storage
 import (
 	"sync"
 
-	"github.com/danhspe/fizz-buzz-rest-server/interfaces"
 	"github.com/danhspe/fizz-buzz-rest-server/models/argumentStore"
 	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
 )
@@ -64,4 +63,4 @@ func (s *Storage) MostFrequentEntries() argumentStore.ArgumentStore {
 	return mostFrequentEntries
 }
 
-var _ interfaces.Counter = (*Storage)(nil)
+var _ Counter = (*Storage)(nil)

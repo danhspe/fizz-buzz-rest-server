@@ -1,4 +1,4 @@
-package interfaces
+package storage
 
 import (
 	"github.com/danhspe/fizz-buzz-rest-server/models/argumentStore"
