@@ -27,7 +27,7 @@ func (f *fizzBuzzRepository) AddArgument(argument arguments.Arguments) error {
 	}
 
 	_, err = f.cache.SortedSetAdd(defaultSortedSetName, entry, 1)
-	if err != nil && err == cache.ErrReadSortedSet {
+	if err != nil && err == cache.ErrWriteSortedSet {
 		log.Printf("AddArgument error: %s\n", err.Error())
 		return repositories.ErrAddArgument
 	}

@@ -25,7 +25,6 @@ func (f *fizzBuzzUseCase) GetFizzBuzz(arguments arguments.Arguments) (string, er
 	result := fizzBuzz.FizzBuzz(arguments.Int1, arguments.Int2, arguments.Limit, arguments.Str1, arguments.Str2)
 
 	if err := f.repository.AddArgument(arguments); err != nil {
-		log.Println(err.Error())
 		switch err {
 		case repositories.ErrSerializeArgument, repositories.ErrAddArgument:
 			return "", usecases.ErrSaveFizzBuzzArguments

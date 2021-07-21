@@ -31,7 +31,7 @@ func (s *grpcServer) GetFizzBuzz(ctx context.Context, request *fizzbuzz.FizzBuzz
 
 	fizzBuzz, err := s.fizzBuzzUseCases.GetFizzBuzz(args)
 	if err != nil && err == usecases.ErrSaveFizzBuzzArguments {
-		return nil, status.Errorf(codes.Internal, "%s", "failed to save arguments for statistics")
+		return nil, status.Error(codes.Internal, "failed to save arguments for statistics")
 	}
 
 	return &fizzbuzz.FizzBuzzResponse{
@@ -43,7 +43,7 @@ func (s *grpcServer) GetStatistics(ctx context.Context, empty *emptypb.Empty) (*
 
 	highestScore, mostFrequentArguments, err := s.statisticsUseCases.GetStatistics()
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "%s", "failed to get arguments statistics")
+		return nil, status.Error(codes.Internal, "failed to get statistics")
 	}
 
 	var fizzBuzzRequests []*fizzbuzz.FizzBuzzRequest
