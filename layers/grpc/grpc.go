@@ -2,6 +2,8 @@ package grpc
 
 import (
 	"context"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"log"
 
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -23,17 +25,26 @@ func NewFizzBuzzServiceServer(fizzBuzzUseCases usecases.FizzBuzz, statisticsUseC
 }
 
 func (s *grpcServer) GetFizzBuzz(ctx context.Context, request *fizzbuzz.FizzBuzzRequest) (*fizzbuzz.FizzBuzzResponse, error) {
+
 	args := arguments.New(int(request.Int1), int(request.Int2), int(request.Limit), request.Str1, request.Str2)
 	log.Printf("GetFizzBuzz arguments: %+v", args)
 
-	fizzBuzz := s.fizzBuzzUseCases.GetFizzBuzz(args)
+	fizzBuzz, err := s.fizzBuzzUseCases.GetFizzBuzz(args)
+	if err != nil && err == usecases.ErrSaveFizzBuzzArguments {
+		return nil, status.Errorf(codes.Internal, "%s", "failed to save arguments for statistics")
+	}
+
 	return &fizzbuzz.FizzBuzzResponse{
 		Result: fizzBuzz,
 	}, nil
 }
 
 func (s *grpcServer) GetStatistics(ctx context.Context, empty *emptypb.Empty) (*fizzbuzz.StatisticsResponse, error) {
-	highestScore, mostFrequentArguments := s.statisticsUseCases.GetStatistics()
+
+	highestScore, mostFrequentArguments, err := s.statisticsUseCases.GetStatistics()
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "%s", "failed to get arguments statistics")
+	}
 
 	var fizzBuzzRequests []*fizzbuzz.FizzBuzzRequest
 
