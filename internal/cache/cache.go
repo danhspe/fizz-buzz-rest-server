@@ -1,8 +1,15 @@
 package cache
 
+import "errors"
+
+var ErrNoConnection = errors.New("no connection")
+var ErrCloseConnection = errors.New("failed to close connection")
+var ErrReadSortedSet = errors.New("failed to read sorted set")
+var ErrWriteSortedSet = errors.New("failed to write sorted set")
+
 type Cache interface {
-	Connect() bool
-	Close() bool
+	Connect() error
+	Close() error
 
 	SortedSetAdd(key string, member string, increment float64) (float64, error)
 	SortedSetScore(key string, member string) (float64, error)

@@ -39,7 +39,7 @@ func init() {
 // initCache returns a redis client and optionally waits until the connection has been established
 func initCache(address string, retry bool) cache.Cache {
 	redisCache := redis.NewRedisCache(address)
-	for retry && redisCache.Connect() == false {
+	for retry && redisCache.Connect() != nil {
 		log.Printf("Waiting for Redis connection at %s", address)
 		time.Sleep(retryTimeout)
 	}
@@ -50,7 +50,7 @@ func main() {
 	dataCache = initCache(defaultRedisEndpoint, true)
 
 	//
-	// start GRPC server in background
+	// start gRPC server in background
 	//
 
 	listener, err := net.Listen("tcp", defaultGrpcEndpoint)
@@ -72,7 +72,7 @@ func main() {
 	}()
 
 	//
-	// start GRPC Gateway
+	// start gRPC Gateway
 	//
 
 	ctx := context.Background()

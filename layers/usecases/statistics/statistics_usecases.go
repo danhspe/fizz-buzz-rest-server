@@ -18,23 +18,26 @@ func NewStatisticsUseCases(statistics repositories.Statistics) usecases.Statisti
 	return &statisticsUseCases{statistics: statistics}
 }
 
-func (s *statisticsUseCases) GetStatistics() (highestScore int, mostFrequentArguments []arguments.Arguments) {
+func (s *statisticsUseCases) GetStatistics() (highestScore int, mostFrequentArguments []arguments.Arguments, err error) {
 
-	highestScore, _ = s.statistics.HighestScore()
+	highestScore, err = s.statistics.HighestScore()
+	if err != nil {
+		return 0, nil, usecases.ErrGetStatistics
+	}
 
 	argumentsWithScores, err := s.statistics.MostFrequentEntriesWithScores()
 	if err != nil {
-		log.Printf("GetStatistics error: %s\n", err.Error())
+		return 0, nil, usecases.ErrGetStatistics
 	}
 
-	argumentsList := make([]arguments.Arguments, 0)
+	mostFrequentArguments = make([]arguments.Arguments, 0)
 	for argument, score := range argumentsWithScores {
 		if score != highestScore {
-			log.Printf("Highest score %d does not match arguments score: %d\n", highestScore, score)
+			log.Printf("expected highest score %d to match arguments score: %d\n", highestScore, score)
 		} else {
-			argumentsList = append(argumentsList, argument)
+			mostFrequentArguments = append(mostFrequentArguments, argument)
 		}
 	}
 
-	return highestScore, argumentsList
+	return highestScore, mostFrequentArguments, err
 }

@@ -23,12 +23,13 @@ func (f *fizzBuzzRepository) AddArgument(argument arguments.Arguments) error {
 	entry, err := argument.AsJson()
 	if err != nil {
 		log.Printf("AddArgument error: %s\n", err.Error())
-		return repositories.ErrFailedToSerializeArgument
+		return repositories.ErrSerializeArgument
 	}
 
-	if _, err = f.cache.SortedSetAdd(defaultSortedSetName, entry, 1); err != nil {
+	_, err = f.cache.SortedSetAdd(defaultSortedSetName, entry, 1)
+	if err != nil && err == cache.ErrReadSortedSet {
 		log.Printf("AddArgument error: %s\n", err.Error())
-		return repositories.ErrFailedToSaveArgument
+		return repositories.ErrAddArgument
 	}
 
 	return nil

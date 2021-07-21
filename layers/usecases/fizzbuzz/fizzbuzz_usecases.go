@@ -20,21 +20,19 @@ func NewFizzBuzzUseCase(repository repositories.FizzBuzzRepository) usecases.Fiz
 	return &fizzBuzzUseCase{repository: repository}
 }
 
-func (f *fizzBuzzUseCase) GetFizzBuzz(arguments arguments.Arguments) string {
+func (f *fizzBuzzUseCase) GetFizzBuzz(arguments arguments.Arguments) (string, error) {
 
 	result := fizzBuzz.FizzBuzz(arguments.Int1, arguments.Int2, arguments.Limit, arguments.Str1, arguments.Str2)
 
-	err := f.repository.AddArgument(arguments)
-	if err != nil {
-		switch err { // TODO return error
-		case repositories.ErrFailedToSerializeArgument:
-			log.Fatalf("%s\n", err.Error())
-		case repositories.ErrFailedToSaveArgument:
-			log.Fatalf("%s\n", err.Error())
-		default:
-			log.Fatalf("%s\n", err.Error())
+	if err := f.repository.AddArgument(arguments); err != nil {
+		log.Println(err.Error())
+		switch err {
+		case repositories.ErrSerializeArgument, repositories.ErrAddArgument:
+			return "", usecases.ErrSaveFizzBuzzArguments
+		default: // should not occur
+			log.Fatalf("Unexpected error: %s\n", err.Error())
 		}
 	}
 
-	return fmt.Sprintf("%+v", result)
+	return fmt.Sprintf("%+v", result), nil
 }

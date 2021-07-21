@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/danhspe/fizz-buzz-rest-server/internal/cache"
 	"github.com/go-redis/redis/v8"
+
+	"github.com/danhspe/fizz-buzz-rest-server/internal/cache"
 )
 
 type redisCache struct {
@@ -31,22 +32,22 @@ func NewRedisCache(address string) cache.Cache {
 	}
 }
 
-func (c *redisCache) Connect() bool {
+func (c *redisCache) Connect() error {
 	statusCmd := c.client.Ping(c.ctx)
 	if _, err := statusCmd.Result(); err != nil {
-		log.Printf(fmt.Sprintf("Failed to connect/ping Redis at %s: %s\n", c.client.Options().Addr, err.Error()))
-		return false
+		log.Printf(fmt.Sprintf("Failed to ping Redis at %s: %s\n", c.client.Options().Addr, err.Error()))
+		return cache.ErrNoConnection
 	}
-	return true
+	return nil
 }
 
-func (c *redisCache) Close() bool {
+func (c *redisCache) Close() error {
 	err := c.client.Close()
 	if err != nil {
 		log.Printf(fmt.Sprintf("Failed to close Redis client for %s: %s\n", c.client.Options().Addr, err.Error()))
-		return false
+		return cache.ErrCloseConnection
 	}
-	return true
+	return nil
 }
 
 // SortedSetAdd adds the member and increments it's score.
@@ -56,23 +57,23 @@ func (c *redisCache) SortedSetAdd(key string, member string, increment float64) 
 		Members: []redis.Z{{Score: increment, Member: member}},
 	})
 
-	result, err := floatCmd.Result()
-	if err != nil {
-		log.Printf("ZAddArgsIncr failed : %s", err.Error())
+	if result, err := floatCmd.Result(); err != nil {
+		log.Printf("ZAddArgsIncr error: %s", err.Error())
+		return result, cache.ErrWriteSortedSet
+	} else {
+		return result, nil
 	}
-	log.Printf("ZAddArgsIncr result: %+v", result)
-	return result, nil
 }
 
 // SortedSetScore returns the score of the member.
 func (c *redisCache) SortedSetScore(key string, member string) (float64, error) {
 	floatCmd := c.client.ZScore(c.ctx, key, member)
-	result, err := floatCmd.Result()
-	if err != nil {
-		log.Printf("ZScore failed: %s", err.Error())
+	if result, err := floatCmd.Result(); err != nil {
+		log.Printf("ZScore error: %s", err.Error())
+		return result, cache.ErrReadSortedSet
+	} else {
+		return result, nil
 	}
-	log.Printf("ZScore result: %+v", result)
-	return result, err
 }
 
 // SortedSetRangeWithScores returns the members with indices from start to stop sorted by score; returns nil on error.
@@ -81,21 +82,21 @@ func (c *redisCache) SortedSetRangeWithScores(key string, start int64, stop int6
 	zSliceCmd := c.client.ZRangeWithScores(c.ctx, key, start, stop)
 	result, err := zSliceCmd.Result()
 	if err != nil {
-		log.Printf("ZRangeWithScores failed: %s", err.Error())
-		return nil, err
+		log.Printf("ZRangeWithScores error: %s", err.Error())
+		return nil, cache.ErrReadSortedSet
 	}
-	log.Printf("ZRangeWithScores result: %+v", result)
 
 	entries := make(map[string]int)
-	for i, v := range result {
+	for k, v := range result {
 		score := v.Score
 		member := v.Member
-		log.Printf("index: %d score: %f member: %+v", i, score, member)
 		if str, ok := member.(string); ok {
 			entries[str] = int(score)
+		} else {
+			log.Printf("expected type string for index: %d score: %f member: %+v", k, score, member)
 		}
 	}
-	return entries, err
+	return entries, nil
 }
 
 // SortedSetRangeByScoreWithScores returns the members with scores between min and max; returns nil on error.
@@ -106,21 +107,22 @@ func (c *redisCache) SortedSetRangeByScoreWithScores(key string, min string, max
 		Offset: 0,
 		Count:  0,
 	})
+
 	result, err := stringSliceCmd.Result()
 	if err != nil {
-		log.Printf("ZRangeByScoreWithScores failed: %s", err.Error())
-		return nil, err
+		log.Printf("ZRangeByScoreWithScores error: %s", err.Error())
+		return nil, cache.ErrReadSortedSet
 	}
-	log.Printf("ZRangeByScoreWithScores result: %+v", result)
 
 	entries := make(map[string]int)
 	for k, v := range result {
 		score := v.Score
 		member := v.Member
-		log.Printf("index: %d score: %f member: %+v", k, score, member)
 		if str, ok := member.(string); ok {
 			entries[str] = int(score)
+		} else {
+			log.Printf("expected type string for index: %d score: %f member: %+v", k, score, member)
 		}
 	}
-	return entries, err
+	return entries, nil
 }

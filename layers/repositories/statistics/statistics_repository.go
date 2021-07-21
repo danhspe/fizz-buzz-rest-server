@@ -23,10 +23,11 @@ func NewStatisticsRepository(cache cache.Cache) repositories.Statistics {
 }
 
 func (s *statisticsRepository) HighestScore() (int, error) {
+
 	entries, err := s.cache.SortedSetRangeWithScores(defaultSortedSetName, -1, -1)
-	if err != nil {
+	if err != nil && err == cache.ErrReadSortedSet {
 		log.Printf("Failed to get highest scores from cache: %s\n", err.Error())
-		return 0, err
+		return 0, repositories.ErrGetHighestScore
 	}
 
 	var highestScore int
@@ -34,6 +35,7 @@ func (s *statisticsRepository) HighestScore() (int, error) {
 		log.Printf("member: %s score: %+d\n", member, score)
 		highestScore = score
 	}
+
 	return highestScore, nil
 }
 
@@ -45,8 +47,9 @@ func (s *statisticsRepository) MostFrequentEntriesWithScores() (map[arguments.Ar
 	}
 
 	entries, err := s.cache.SortedSetRangeByScoreWithScores(defaultSortedSetName, strconv.Itoa(highestCount), strconv.Itoa(highestCount))
-	if err != nil {
+	if err != nil && err == cache.ErrReadSortedSet {
 		log.Printf("Failed to get most frequent entries from cache: %s\n", err.Error())
+		return nil, repositories.ErrGetMostFrequentEntriesWithScore
 	}
 
 	argumentsWithScores := make(map[arguments.Arguments]int)
@@ -54,7 +57,7 @@ func (s *statisticsRepository) MostFrequentEntriesWithScores() (map[arguments.Ar
 		var arg arguments.Arguments
 		if err := json.Unmarshal([]byte(entry), &arg); err != nil {
 			log.Printf("Failed to unmarshal arguments: %s\n", err.Error())
-			return argumentsWithScores, err
+			return argumentsWithScores, repositories.ErrDeserializeArgument
 		}
 		argumentsWithScores[arg] = score
 	}
