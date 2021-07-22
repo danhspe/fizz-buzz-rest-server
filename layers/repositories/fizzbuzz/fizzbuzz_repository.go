@@ -22,7 +22,6 @@ func (f *fizzBuzzRepository) AddArgument(argument arguments.Arguments) error {
 
 	entry, err := argument.AsJson()
 	if err != nil {
-		log.Printf("AddArgument error: %s\n", err.Error())
 		return repositories.ErrSerializeArgument
 	}
 

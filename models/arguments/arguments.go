@@ -22,6 +22,7 @@ func NewFromJson(s string) (Arguments, error) {
 	err := json.Unmarshal([]byte(s), args)
 	if err != nil {
 		log.Printf("Failed to decode arguments from JSON: %s\n", err.Error())
+		return *args, err
 	}
 	return *args, nil
 }

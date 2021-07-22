@@ -1,7 +1,6 @@
 package statistics
 
 import (
-	"encoding/json"
 	"log"
 	"strconv"
 
@@ -54,12 +53,11 @@ func (s *statisticsRepository) MostFrequentEntriesWithScores() (map[arguments.Ar
 
 	argumentsWithScores := make(map[arguments.Arguments]int)
 	for entry, score := range entries {
-		var arg arguments.Arguments
-		if err := json.Unmarshal([]byte(entry), &arg); err != nil {
-			log.Printf("Failed to unmarshal arguments: %s\n", err.Error())
+		if arg, err := arguments.NewFromJson(entry); err != nil {
 			return argumentsWithScores, repositories.ErrDeserializeArgument
+		} else {
+			argumentsWithScores[arg] = score
 		}
-		argumentsWithScores[arg] = score
 	}
 
 	return argumentsWithScores, nil
