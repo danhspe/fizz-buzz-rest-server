@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 	"net"
 	"net/http"
@@ -21,33 +22,44 @@ import (
 )
 
 const (
-	defaultHttpEndpoint  = "localhost:8080"
-	defaultGrpcEndpoint  = "localhost:58080"
+	defaultHttpEndpoint  = ":8080"
+	defaultGrpcEndpoint  = ":58080"
 	defaultRedisEndpoint = "localhost:6379"
 )
 
 const retryTimeout = time.Second * 5
 
 var (
-	dataCache cache.Cache
+	dataCache     cache.Cache
+	redisEndpoint *string
 )
 
 func init() {
 	log.SetPrefix("fizz-buzz-rest-server ")
+	initDefaults()
+}
+
+func initDefaults() {
+	redisEndpoint = flag.String("redisEndpoint", defaultRedisEndpoint, "Redis endpoint host:port")
+	flag.Parse()
+	log.Printf("Redis endpoint: %s", *redisEndpoint)
 }
 
 // initCache returns a redis client and optionally waits until the connection has been established
 func initCache(address string, retry bool) cache.Cache {
 	redisCache := redis.NewRedisCache(address)
+	if redisCache.Connect() != nil {
+		log.Printf("Warning: Redis endpoint not reachable at %s", address)
+	}
 	for retry && redisCache.Connect() != nil {
-		log.Printf("Waiting for Redis connection at %s", address)
+		log.Printf("Waiting for Redis endpoint at %s", address)
 		time.Sleep(retryTimeout)
 	}
 	return redisCache
 }
 
 func main() {
-	dataCache = initCache(defaultRedisEndpoint, true)
+	dataCache = initCache(*redisEndpoint, true)
 
 	//
 	// start gRPC server in background
