@@ -22,9 +22,10 @@ import (
 )
 
 const (
-	defaultHttpEndpoint  = ":8080"
-	defaultGrpcEndpoint  = ":58080"
-	defaultRedisEndpoint = "localhost:6379"
+	defaultHttpEndpoint       = ":8080"
+	defaultGrpcEndpoint       = ":58080"
+	defaultRedisEndpoint      = "localhost:6379"
+	defaultShouldWaitForRedis = false
 )
 
 const retryTimeout = time.Second * 5
@@ -32,6 +33,7 @@ const retryTimeout = time.Second * 5
 var (
 	dataCache     cache.Cache
 	redisEndpoint *string
+	waitForRedis  *bool
 )
 
 func init() {
@@ -41,17 +43,19 @@ func init() {
 
 func initDefaults() {
 	redisEndpoint = flag.String("redisEndpoint", defaultRedisEndpoint, "Redis endpoint host:port")
+	waitForRedis = flag.Bool("waitForRedis", defaultShouldWaitForRedis, "Wait for Redis to be ready")
 	flag.Parse()
 	log.Printf("Redis endpoint: %s", *redisEndpoint)
+	log.Printf("Wait for Redis: %t", *waitForRedis)
 }
 
 // initCache returns a redis client and optionally waits until the connection has been established
-func initCache(address string, retry bool) cache.Cache {
+func initCache(address string, waitForRedis bool) cache.Cache {
 	redisCache := redis.NewRedisCache(address)
 	if redisCache.Connect() != nil {
 		log.Printf("Warning: Redis endpoint not reachable at %s", address)
 	}
-	for retry && redisCache.Connect() != nil {
+	for waitForRedis && redisCache.Connect() != nil {
 		log.Printf("Waiting for Redis endpoint at %s", address)
 		time.Sleep(retryTimeout)
 	}
@@ -59,7 +63,7 @@ func initCache(address string, retry bool) cache.Cache {
 }
 
 func main() {
-	dataCache = initCache(*redisEndpoint, true)
+	dataCache = initCache(*redisEndpoint, *waitForRedis)
 
 	//
 	// start gRPC server in background
