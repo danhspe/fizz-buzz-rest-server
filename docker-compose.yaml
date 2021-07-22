@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  fizz-buzz-rest-server:
+    image: fizz-buzz-rest-server:latest
+    command: [ "-redisEndpoint", "redis:6379", "-waitForRedis=true" ]
+    networks:
+      fizz-buzz:
+    ports:
+      - 80:8080
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    command: [ "redis-server", "--appendonly", "yes" ]
+    networks:
+      fizz-buzz:
+    volumes:
+      - ~/Temp/db/redistest:/data
+
+networks:
+  fizz-buzz:
