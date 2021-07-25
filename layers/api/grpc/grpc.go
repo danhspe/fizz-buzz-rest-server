@@ -9,6 +9,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/danhspe/fizz-buzz-rest-server/golib/fizzbuzz"
+	"github.com/danhspe/fizz-buzz-rest-server/layers/api"
 	"github.com/danhspe/fizz-buzz-rest-server/layers/usecases"
 	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
 )
@@ -18,9 +19,9 @@ type grpcServer struct {
 	statisticsUseCases usecases.Statistics
 }
 
-var _ fizzbuzz.FizzBuzzServiceServer = (*grpcServer)(nil)
+var _ api.GRPC = (*grpcServer)(nil)
 
-func NewFizzBuzzServiceServer(fizzBuzzUseCases usecases.FizzBuzz, statisticsUseCases usecases.Statistics) fizzbuzz.FizzBuzzServiceServer {
+func NewFizzBuzzServiceServer(fizzBuzzUseCases usecases.FizzBuzz, statisticsUseCases usecases.Statistics) api.GRPC {
 	return &grpcServer{fizzBuzzUseCases: fizzBuzzUseCases, statisticsUseCases: statisticsUseCases}
 }
 
