@@ -5,6 +5,10 @@ IMPORTS=-I/usr/local/include -I$(GOPATH)/src -I$(GOPATH)/src/github.com/grpc-eco
 SOURCES=$(PROTO_DIR)/*.proto
 GW_SOURCES=$(PROTO_DIR)/*service.proto
 
+DOCKER_USER=spelmezan
+IMAGE_NAME=fizz-buzz-rest-server
+TAG_NAME=0.1.0
+
 DIR_BIN=bin
 DIR_GOLIB=golib
 DIR_TEMP=tmp
@@ -14,7 +18,7 @@ DIRS=$(DIR_BIN)/ $(DIR_GOLIB)/ $(DIR_TEMP)/
 
 DIR_MODULE_PATH=github.com/danhspe/fizz-buzz-rest-server
 
-.PHONY: all clean build models #vendor
+.PHONY: all clean build docker models #vendor
 
 all: clean models build
 #all: clean vendor models build
@@ -27,6 +31,10 @@ build:
 	go mod tidy
 	go mod download
 	go build -o $(DIR_BIN)/main -mod=readonly
+
+docker:
+	docker build -t $(DOCKER_USER)/$(IMAGE_NAME):$(TAG_NAME) .
+	docker push $(DOCKER_USER)/$(IMAGE_NAME):$(TAG_NAME)
 
 models:
 	# generate go grpc server & client
