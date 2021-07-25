@@ -34,6 +34,7 @@ build:
 	#go build -o $(DIR_BIN)/main -mod=readonly
 
 docker:
+	#docker login
 	docker build -t $(DOCKER_USER)/$(IMAGE_NAME):$(TAG_NAME) .
 	docker push $(DOCKER_USER)/$(IMAGE_NAME):$(TAG_NAME)
 
