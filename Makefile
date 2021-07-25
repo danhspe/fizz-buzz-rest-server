@@ -30,7 +30,8 @@ clean:
 build:
 	go mod tidy
 	go mod download
-	go build -o $(DIR_BIN)/main -mod=readonly
+	go build -o $(DIR_BIN)/main
+	#go build -o $(DIR_BIN)/main -mod=readonly
 
 docker:
 	docker build -t $(DOCKER_USER)/$(IMAGE_NAME):$(TAG_NAME) .
@@ -46,7 +47,8 @@ models:
 	rm -rf $(DIR_TEMP)
 
 test:
-	go test -race -mod=readonly ./...
+	go test -race ./...
+	#go test -race -mod=readonly ./...
 
 #vendor:
 	# third-party proto files
