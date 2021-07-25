@@ -14,7 +14,7 @@ import (
 	"github.com/danhspe/fizz-buzz-rest-server/golib/fizzbuzz"
 	"github.com/danhspe/fizz-buzz-rest-server/internal/cache"
 	"github.com/danhspe/fizz-buzz-rest-server/internal/cache/redis"
-	grpc2 "github.com/danhspe/fizz-buzz-rest-server/layers/grpc"
+	grpc2 "github.com/danhspe/fizz-buzz-rest-server/layers/api/grpc"
 	fizzbuzz3 "github.com/danhspe/fizz-buzz-rest-server/layers/repositories/fizzbuzz"
 	"github.com/danhspe/fizz-buzz-rest-server/layers/repositories/statistics"
 	fizzbuzz2 "github.com/danhspe/fizz-buzz-rest-server/layers/usecases/fizzbuzz"
