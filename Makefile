@@ -1,5 +1,5 @@
 PROTOC=protoc
-PROTO_DIR=models/pb
+PROTO_DIR=internal/models/pb
 IMPORTS=-I/usr/local/include -I$(GOPATH)/src -I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis -I$(PROTO_DIR)
 #IMPORTS=-I/usr/local/include -I$(GOPATH)/src -I$(DIR_VENDOR)/github.com/googleapis/googleapis -I$(PROTO_DIR)
 SOURCES=$(PROTO_DIR)/*.proto
@@ -20,7 +20,7 @@ DIR_MODULE_PATH=github.com/danhspe/fizz-buzz-rest-server
 
 .PHONY: all clean build docker models #vendor
 
-all: clean models build
+all: clean models test build
 #all: clean vendor models build
 
 clean:
@@ -34,7 +34,7 @@ build:
 	#go build -o $(DIR_BIN)/main -mod=readonly
 
 docker:
-	#docker login
+	docker login -u $(DOCKER_USER)
 	docker build -t $(DOCKER_USER)/$(IMAGE_NAME):$(TAG_NAME) .
 	docker push $(DOCKER_USER)/$(IMAGE_NAME):$(TAG_NAME)
 
