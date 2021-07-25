@@ -8,8 +8,6 @@ COPY go.sum ./
 COPY main.go main.go
 COPY golib/ golib/
 COPY internal/ internal/
-COPY models/ models/
-COPY layers/ layers/
 
 RUN go mod tidy
 RUN go mod download
