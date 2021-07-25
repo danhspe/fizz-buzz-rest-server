@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-redis/redis/v8"
 
-	"github.com/danhspe/fizz-buzz-rest-server/internal/cache"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/storage/cache"
 )
 
 type redisCache struct {

@@ -3,7 +3,7 @@ package fizzbuzz
 import (
 	"log"
 
-	"github.com/danhspe/fizz-buzz-rest-server/internal/cache"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/storage/cache"
 	"github.com/danhspe/fizz-buzz-rest-server/layers/repositories"
 	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
 )
