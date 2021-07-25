@@ -1,6 +1,6 @@
 package argumentStore
 
-import "github.com/danhspe/fizz-buzz-rest-server/models/arguments"
+import "github.com/danhspe/fizz-buzz-rest-server/internal/models/arguments"
 
 type ArgumentStore = map[arguments.Arguments]int
 

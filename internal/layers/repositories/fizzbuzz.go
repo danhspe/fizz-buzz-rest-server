@@ -3,7 +3,7 @@ package repositories
 import (
 	"errors"
 
-	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/models/arguments"
 )
 
 var ErrSerializeArgument = errors.New("failed to serialize argument")

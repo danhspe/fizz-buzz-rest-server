@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/danhspe/fizz-buzz-rest-server/internal/layers/repositories"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/models/arguments"
 	"github.com/danhspe/fizz-buzz-rest-server/internal/storage/cache"
-	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
 )
 
 const defaultSortedSetName = "fizzbuzz"

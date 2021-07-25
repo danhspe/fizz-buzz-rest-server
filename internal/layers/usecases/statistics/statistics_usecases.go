@@ -5,7 +5,7 @@ import (
 
 	"github.com/danhspe/fizz-buzz-rest-server/internal/layers/repositories"
 	"github.com/danhspe/fizz-buzz-rest-server/internal/layers/usecases"
-	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/models/arguments"
 )
 
 type statisticsUseCases struct {

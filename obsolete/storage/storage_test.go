@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/models/arguments"
 	"github.com/danhspe/fizz-buzz-rest-server/obsolete/storage"
 )
 
