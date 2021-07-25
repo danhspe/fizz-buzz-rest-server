@@ -9,8 +9,8 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/danhspe/fizz-buzz-rest-server/golib/fizzbuzz"
-	"github.com/danhspe/fizz-buzz-rest-server/layers/api"
-	"github.com/danhspe/fizz-buzz-rest-server/layers/usecases"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/layers/api"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/layers/usecases"
 	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
 )
 

@@ -3,8 +3,8 @@ package statistics
 import (
 	"log"
 
-	"github.com/danhspe/fizz-buzz-rest-server/layers/repositories"
-	"github.com/danhspe/fizz-buzz-rest-server/layers/usecases"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/layers/repositories"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/layers/usecases"
 	"github.com/danhspe/fizz-buzz-rest-server/models/arguments"
 )
 
