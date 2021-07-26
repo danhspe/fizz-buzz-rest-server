@@ -17,7 +17,7 @@ services:
     networks:
       fizz-buzz:
     volumes:
-      - ~/Temp/db/redistest:/data
+      - ./data/:/data
 
 networks:
   fizz-buzz:
