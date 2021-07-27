@@ -1,7 +1,94 @@
-# fizz-buzz-rest-server
+# Fizz-Buzz REST Server
 
-Fizz-Buzz REST Server
+Calculates the Fizz-Buzz sequence from number `1` to `limit`. Multiples of `int1` will be replaced with `str1`,
+multiples of `int2` with `str2`, and multiples of `int1 and int2` with `str1str2`.
 
-## Dependencies
+The arguments will be cached for calculating statistics about the most frequent requests.
 
-Redis is used for caching data.
+## API
+
+- POST /fizzbuzz
+
+  ```shell
+  curl localhost:8080/fizzbuzz -X POST -d '{ "int1": 3, "int2": 5, "limit": 15, "str1": "Fizz", "str2": "Buzz" }'
+  ```
+
+  ```
+    {
+      "result": "[1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz]"
+    }
+  ```
+
+- GET /statistics
+
+  ```shell
+  curl localhost:8080/statistics
+  ```
+
+  ```
+  {
+    "highest_score": "1",
+    "requests": [
+      {
+        "int1": "3",
+        "int2": "5",
+        "limit": "15",
+        "str1": "Fizz",
+        "str2": "Buzz"
+      }
+    ]
+  }
+  ```
+
+## Run the server as a multi-container application
+
+The statistics will be cached with [Redis](https://redis.io/). Data will be saved to the directory `./data`.
+
+Run `docker-compose up -d` to start the server together with a Redis instance.
+
+Run `docker-compose down` to stop the server and Redis.
+
+---
+
+If you want to start the server and Redis instance manually:
+
+- Start the Redis service, which needs to be accessible on localhost (the default endpoint).
+
+   ```shell
+   docker run -d --name redis --rm -p 6379:6379 -v $(PWD)/data:/data redis --appendonly yes
+   ```
+
+- Run `go run .` to start the server. You can set the Redis endpoint with `-redisEndpoint localhost:6379` and wait for
+  it with `-waitForRedis=true`.
+
+## Requirements
+
+- Golang: https://go.dev
+
+- Protocol buffers v3: https://developers.google.com/protocol-buffers/docs/downloads
+
+- Protocol buffers plugin for Go: https://developers.google.com/protocol-buffers/docs/gotutorial
+
+  ```shell
+  go install google.golang.org/protobuf/cmd/protoc-gen-go
+  ```
+
+- gRPC: https://grpc.io/blog/installation
+
+  ```shell
+  go get google.golang.org/grpc
+  ```
+
+- gRPC Gateway: https://github.com/grpc-ecosystem/grpc-gateway
+
+  ```shell
+  go install \
+        github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
+        github.com/golang/protobuf/protoc-gen-go
+  ```
+
+## Build
+
+Run `make all` to compile the protobuf files, generate the gRPC client/server code, and build the Go code.
+
+Run `make docker` to build and push the docker image to the docker hub.
