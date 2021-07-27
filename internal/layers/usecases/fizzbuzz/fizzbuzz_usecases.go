@@ -23,6 +23,9 @@ func NewFizzBuzzUseCase(repository repositories.FizzBuzzRepository) usecases.Fiz
 func (f *fizzBuzzUseCase) GetFizzBuzz(arguments arguments.Arguments) (string, error) {
 
 	result := fizzBuzz.FizzBuzz(arguments.Int1, arguments.Int2, arguments.Limit, arguments.Str1, arguments.Str2)
+	if len(result) == 0 {
+		return "", usecases.ErrWrongFizzBuzzArguments
+	}
 
 	if err := f.repository.AddArgument(arguments); err != nil {
 		switch err {

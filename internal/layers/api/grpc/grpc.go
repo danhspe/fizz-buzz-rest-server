@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"log"
@@ -31,8 +32,12 @@ func (s *grpcServer) GetFizzBuzz(ctx context.Context, request *fizzbuzz.FizzBuzz
 	log.Printf("GetFizzBuzz arguments: %+v", args)
 
 	fizzBuzz, err := s.fizzBuzzUseCases.GetFizzBuzz(args)
-	if err != nil && err == usecases.ErrSaveFizzBuzzArguments {
-		return nil, status.Error(codes.Internal, "failed to save arguments for statistics")
+	if err != nil {
+		if err == usecases.ErrWrongFizzBuzzArguments {
+			return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("%s: %+v", err.Error(), args))
+		} else if err == usecases.ErrSaveFizzBuzzArguments {
+			return nil, status.Error(codes.Internal, "failed to save arguments for statistics")
+		}
 	}
 
 	return &fizzbuzz.FizzBuzzResponse{
