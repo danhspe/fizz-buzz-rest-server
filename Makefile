@@ -1,7 +1,6 @@
 PROTOC=protoc
 PROTO_DIR=internal/models/pb
 IMPORTS=-I/usr/local/include -I$(GOPATH)/src -I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis -I$(PROTO_DIR)
-#IMPORTS=-I/usr/local/include -I$(GOPATH)/src -I$(DIR_VENDOR)/github.com/googleapis/googleapis -I$(PROTO_DIR)
 SOURCES=$(PROTO_DIR)/*.proto
 GW_SOURCES=$(PROTO_DIR)/*service.proto
 
@@ -13,15 +12,12 @@ DIR_BIN=bin
 DIR_GOLIB=golib
 DIR_TEMP=tmp
 DIRS=$(DIR_BIN)/ $(DIR_GOLIB)/ $(DIR_TEMP)/
-#DIR_VENDOR=vendor
-#DIRS=$(DIR_BIN)/ $(DIR_GOLIB)/ $(DIR_TEMP)/ $(DIR_VENDOR)/
 
 DIR_MODULE_PATH=github.com/danhspe/fizz-buzz-rest-server
 
-.PHONY: all clean build docker models #vendor
+.PHONY: all clean build docker models
 
 all: clean models test build
-#all: clean vendor models build
 
 clean:
 	rm -rf $(DIRS)
@@ -31,7 +27,6 @@ build:
 	go mod tidy
 	go mod download
 	go build -o $(DIR_BIN)/main
-	#go build -o $(DIR_BIN)/main -mod=readonly
 
 docker:
 	docker login -u $(DOCKER_USER)
@@ -49,8 +44,3 @@ models:
 
 test:
 	go test -race ./...
-	#go test -race -mod=readonly ./...
-
-#vendor:
-	# third-party proto files
-	#git clone --depth 1 https://github.com/googleapis/googleapis $(DIR_VENDOR)/github.com/googleapis/googleapis
