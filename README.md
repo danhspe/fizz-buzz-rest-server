@@ -80,6 +80,7 @@ If you want to start the server and Redis instance manually:
   ```
 
 - gRPC Gateway: https://github.com/grpc-ecosystem/grpc-gateway
+    - v1: https://github.com/grpc-ecosystem/grpc-gateway/tree/v1
 
   ```shell
   go install \
