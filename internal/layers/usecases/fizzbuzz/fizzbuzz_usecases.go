@@ -1,8 +1,8 @@
 package fizzbuzz
 
 import (
-	"fmt"
 	"log"
+	"strings"
 
 	"github.com/danhspe/fizz-buzz-rest-server/internal/fizzBuzz"
 	"github.com/danhspe/fizz-buzz-rest-server/internal/layers/repositories"
@@ -26,6 +26,7 @@ func (f *fizzBuzzUseCase) GetFizzBuzz(arguments arguments.Arguments) (string, er
 	if len(result) == 0 {
 		return "", usecases.ErrWrongFizzBuzzArguments
 	}
+	fizzBuzzString := strings.Join(result, ", ")
 
 	if err := f.repository.AddArgument(arguments); err != nil {
 		switch err {
@@ -36,5 +37,5 @@ func (f *fizzBuzzUseCase) GetFizzBuzz(arguments arguments.Arguments) (string, er
 		}
 	}
 
-	return fmt.Sprintf("%+v", result), nil
+	return fizzBuzzString, nil
 }
