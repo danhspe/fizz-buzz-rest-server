@@ -29,14 +29,14 @@ func NewFizzBuzzServiceServer(fizzBuzzUseCases usecases.FizzBuzz, statisticsUseC
 func (s *grpcServer) GetFizzBuzz(ctx context.Context, request *fizzbuzz.FizzBuzzRequest) (*fizzbuzz.FizzBuzzResponse, error) {
 
 	args := arguments.New(int(request.Int1), int(request.Int2), int(request.Limit), request.Str1, request.Str2)
-	log.Printf("GetFizzBuzz arguments: %+v", args)
+	log.Printf("GetFizzBuzz with arguments: %+v", args)
 
 	fizzBuzz, err := s.fizzBuzzUseCases.GetFizzBuzz(args)
 	if err != nil {
 		if err == usecases.ErrWrongFizzBuzzArguments {
 			return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("%s: %+v", err.Error(), args))
 		} else if err == usecases.ErrSaveFizzBuzzArguments {
-			return nil, status.Error(codes.Internal, "failed to save arguments for statistics")
+			log.Printf("GetFizzBuzz error: %s", err)
 		}
 	}
 

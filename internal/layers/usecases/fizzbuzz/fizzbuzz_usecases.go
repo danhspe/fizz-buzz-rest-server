@@ -30,10 +30,12 @@ func (f *fizzBuzzUseCase) GetFizzBuzz(arguments arguments.Arguments) (string, er
 
 	if err := f.repository.AddArgument(arguments); err != nil {
 		switch err {
-		case repositories.ErrSerializeArgument, repositories.ErrAddArgument:
+		case repositories.ErrSerializeArgument:
 			return "", usecases.ErrSaveFizzBuzzArguments
+		case repositories.ErrAddArgument:
+			return fizzBuzzString, usecases.ErrSaveFizzBuzzArguments
 		default: // should not occur
-			log.Fatalf("Unexpected error: %s\n", err.Error())
+			log.Printf("Unexpected error: %s\n", err.Error())
 		}
 	}
 
