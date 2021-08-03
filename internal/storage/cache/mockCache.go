@@ -17,7 +17,8 @@ func (m *MockCache) Close() error {
 }
 
 func (m *MockCache) SortedSetAdd(key string, member string, increment float64) (float64, error) {
-	panic("implement me")
+	args := m.Called(key, member, increment)
+	return args.Get(0).(float64), args.Error(1)
 }
 
 func (m *MockCache) SortedSetScore(key string, member string) (float64, error) {

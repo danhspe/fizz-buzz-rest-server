@@ -50,7 +50,7 @@ func (c *redisCache) Close() error {
 	return nil
 }
 
-// SortedSetAdd adds the member and increments it's score.
+// SortedSetAdd adds the member and increments its score.
 // If the member exists already, the score is updated and the element reinserted at the right position to ensure the correct ordering.
 func (c *redisCache) SortedSetAdd(key string, member string, increment float64) (float64, error) {
 	floatCmd := c.client.ZAddArgsIncr(c.ctx, key, redis.ZAddArgs{
