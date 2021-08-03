@@ -14,8 +14,9 @@ const defaultSortedSetName = "fizzbuzz"
 
 func TestStatisticsRepository_HighestScore_WhenRetrievingHighestScoreFromCacheFails_ThenReturnError(t *testing.T) {
 	var mockResult map[string]int = nil
+	mockError := cache.ErrReadSortedSet
 	mockCache := cache.MockCache{}
-	mockCache.On("SortedSetRangeWithScores", defaultSortedSetName, int64(-1), int64(-1)).Return(mockResult, cache.ErrReadSortedSet)
+	mockCache.On("SortedSetRangeWithScores", defaultSortedSetName, int64(-1), int64(-1)).Return(mockResult, mockError)
 
 	statisticsRepository := statistics.NewStatisticsRepository(&mockCache)
 	expectedScore := 0
