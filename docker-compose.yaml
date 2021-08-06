@@ -17,7 +17,10 @@ services:
     networks:
       fizz-buzz:
     volumes:
-      - ./data/:/data
+      - data:/data
 
 networks:
   fizz-buzz:
+
+volumes:
+  data:
