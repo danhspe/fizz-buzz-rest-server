@@ -40,26 +40,31 @@ The arguments will be cached for calculating statistics about the most frequent 
   }
   ```
 
-## Run the server as a multi-container application
+## Storage
 
-The statistics will be cached with [Redis](https://redis.io/). Data will be saved to the directory `./data`.
+The statistics will be cached with [Redis](https://redis.io/) and saved to the volume `fizz-buzz-rest-server_data`.
+
+## Run the Fizz-Buzz server from source
+
+1. Start the Redis service, which needs to be accessible on localhost (the default endpoint).
+
+   ```shell
+   docker run -d --name redis --rm -p 6379:6379 -v fizz-buzz-rest-server_data:/data redis --appendonly yes
+   ```
+2. Run `go run .` to start the server. You can set the Redis endpoint with `-redisEndpoint localhost:6379` and wait for
+   it with `-waitForRedis=true`.
+
+## Run the Fizz-Buzz server as a multi-container application
 
 Run `docker-compose up -d` to start the server together with a Redis instance.
 
 Run `docker-compose down` to stop the server and Redis.
 
----
+## Run the Fizz-Buzz server on Kubernetes (docker-desktop)
 
-If you want to start the server and Redis instance manually:
+Run `kubectl apply -f deployment.yaml` to start the server together with a Redis instance.
 
-- Start the Redis service, which needs to be accessible on localhost (the default endpoint).
-
-   ```shell
-   docker run -d --name redis --rm -p 6379:6379 -v $(PWD)/data:/data redis --appendonly yes
-   ```
-
-- Run `go run .` to start the server. You can set the Redis endpoint with `-redisEndpoint localhost:6379` and wait for
-  it with `-waitForRedis=true`.
+Run `kubectl delete -f deployment.yaml` to stop the server and Redis.
 
 ## Requirements
 
