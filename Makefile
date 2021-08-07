@@ -29,8 +29,8 @@ build:
 	go build -o $(DIR_BIN)/main
 
 docker:
-	docker login -u $(DOCKER_USER)
 	docker build -t $(DOCKER_USER)/$(IMAGE_NAME):$(TAG_NAME) .
+	docker login -u $(DOCKER_USER)
 	docker push $(DOCKER_USER)/$(IMAGE_NAME):$(TAG_NAME)
 
 models:
