@@ -64,6 +64,8 @@ Run `docker-compose down` to stop the server and Redis.
 
 Run `kubectl apply -f deployment.yaml` to start the server together with a Redis instance.
 
+Run `kubectl port-forward services/fizz-buzz -n fizz-buzz 8080:8080` to access the pods via `localhost:8080`.
+
 Run `kubectl delete -f deployment.yaml` to stop the server and Redis.
 
 ## Requirements

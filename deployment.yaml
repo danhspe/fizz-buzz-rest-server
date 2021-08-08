@@ -14,7 +14,7 @@ metadata:
     app: fizz-buzz
     ver: 0.1.0
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: fizz-buzz
     ver: 0.1.0
