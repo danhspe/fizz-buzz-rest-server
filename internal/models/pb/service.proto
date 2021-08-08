@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package statistics;
+
+option go_package = "github.com/danhspe/fizz-buzz-rest-server/golib/fizzbuzz";
+
+import "fizzbuzz.proto";
+import "statistics.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service FizzBuzzService {
+
+  rpc GetFizzBuzz (fizzbuzz.FizzBuzzRequest) returns (fizzbuzz.FizzBuzzResponse) {
+    option (google.api.http) = {
+      post: "/fizzbuzz"
+      body: "*"
+    };
+  }
+
+  rpc GetStatistics (google.protobuf.Empty) returns (statistics.StatisticsResponse) {
+    option (google.api.http) = {
+      get: "/statistics"
+    };
+  }
+
+}
