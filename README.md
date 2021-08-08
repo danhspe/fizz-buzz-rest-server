@@ -49,7 +49,7 @@ The statistics will be cached with [Redis](https://redis.io/) and saved to the v
 1. Start the Redis service, which needs to be accessible on localhost (the default endpoint).
 
    ```shell
-   docker run -d --name redis --rm -p 6379:6379 -v fizz-buzz-rest-server_data:/data redis --appendonly yes
+   docker run -d --name redis --rm -p 6379:6379 -v fizz-buzz-rest-server_data:/data redis:6.2.5-alpine --appendonly yes
    ```
 2. Run `go run .` to start the server. You can set the Redis endpoint with `-redisEndpoint localhost:6379` and wait for
    it with `-waitForRedis=true`.

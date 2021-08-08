@@ -12,7 +12,7 @@ services:
       - redis
 
   redis:
-    image: redis:latest
+    image: redis:6.2.5-alpine
     command: [ "redis-server", "--appendonly", "yes" ]
     networks:
       fizz-buzz:

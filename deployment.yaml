@@ -55,12 +55,12 @@ metadata:
   name: redis-service
   labels:
     app: redis
-    ver: latest
+    ver: 6.2.5-alpine
 spec:
   type: ClusterIP
   selector:
     app: redis
-    ver: latest
+    ver: 6.2.5-alpine
   ports:
     - protocol: TCP
       port: 6379
@@ -72,17 +72,17 @@ metadata:
   name: redis-deployment
   labels:
     app: redis
-    ver: latest
+    ver: 6.2.5-alpine
 spec:
   selector:
     matchLabels:
       app: redis
-      ver: latest
+      ver: 6.2.5-alpine
   template:
     metadata:
       labels:
         app: redis
-        ver: latest
+        ver: 6.2.5-alpine
     spec:
       volumes:
         - name: "redis-data"
@@ -90,7 +90,7 @@ spec:
             path: "fizz-buzz-rest-server_data"
       containers:
         - name: redis
-          image: redis:latest
+          image: redis:6.2.5-alpine
           resources:
             requests:
               cpu: "100m"
