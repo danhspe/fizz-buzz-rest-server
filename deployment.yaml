@@ -1,3 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fizz-buzz-service
+  labels:
+    app: fizz-buzz
+    ver: 0.1.0
+spec:
+  type: LoadBalancer
+  selector:
+    app: fizz-buzz
+    ver: 0.1.0
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,19 +52,19 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: fizz-buzz-service
+  name: redis-service
   labels:
-    app: fizz-buzz
-    ver: 0.1.0
+    app: redis
+    ver: latest
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
-    app: fizz-buzz
-    ver: 0.1.0
+    app: redis
+    ver: latest
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 6379
+      targetPort: 6379
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -88,20 +105,3 @@ spec:
             - containerPort: 6379
           command: [ "redis-server" ]
           args: [ "--appendonly", "yes" ]
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis-service
-  labels:
-    app: redis
-    ver: latest
-spec:
-  type: ClusterIP
-  selector:
-    app: redis
-    ver: latest
-  ports:
-    - protocol: TCP
-      port: 6379
-      targetPort: 6379
