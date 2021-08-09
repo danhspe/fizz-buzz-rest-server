@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/danhspe/fizz-buzz-rest-server/internal/models/arguments"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/models/health"
 )
 
 var (
@@ -12,5 +13,6 @@ var (
 )
 
 type FizzBuzz interface {
+	health.Health
 	GetFizzBuzz(arguments arguments.Arguments) (string, error)
 }
