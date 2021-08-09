@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package fizzbuzz;
+
+option go_package = "github.com/danhspe/fizz-buzz-rest-server/golib/fizzbuzz";
+
+message FizzBuzzRequest {
+  int64 int1 = 1;
+  int64 int2 = 2;
+  int64 limit = 3;
+  string str1 = 4;
+  string str2 = 5;
+}
+
+message FizzBuzzResponse {
+  string result = 1;
+}

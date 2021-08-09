@@ -1,0 +1,134 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fizz-buzz
+  labels:
+    name: fizz-buzz
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: fizz-buzz
+  name: fizz-buzz
+  labels:
+    app: fizz-buzz
+    ver: 0.1.0
+spec:
+  type: ClusterIP
+  selector:
+    app: fizz-buzz
+    ver: 0.1.0
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: fizz-buzz
+  name: fizz-buzz
+  labels:
+    app: fizz-buzz
+    ver: 0.1.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fizz-buzz
+      ver: 0.1.0
+  template:
+    metadata:
+      labels:
+        app: fizz-buzz
+        ver: 0.1.0
+    spec:
+      containers:
+        - name: fizz-buzz
+          image: spelmezan/fizz-buzz-rest-server:0.1.0
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /healthy
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /ready
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 15
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          ports:
+            - containerPort: 8080
+          args:
+            [ "-redisEndpoint", "redis:6379", "-waitForRedis=false" ]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: fizz-buzz
+  name: redis
+  labels:
+    app: redis
+    ver: 6.2.5-alpine
+spec:
+  type: ClusterIP
+  selector:
+    app: redis
+    ver: 6.2.5-alpine
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: fizz-buzz
+  name: redis
+  labels:
+    app: redis
+    ver: 6.2.5-alpine
+spec:
+  selector:
+    matchLabels:
+      app: redis
+      ver: 6.2.5-alpine
+  template:
+    metadata:
+      labels:
+        app: redis
+        ver: 6.2.5-alpine
+    spec:
+      volumes:
+        - name: "redis-data"
+          hostPath:
+            path: "fizz-buzz-rest-server_data"
+      containers:
+        - name: redis
+          image: redis:6.2.5-alpine
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          volumeMounts:
+            - mountPath: "/data"
+              name: "redis-data"
+          ports:
+            - containerPort: 6379
+          command: [ "redis-server" ]
+          args: [ "--appendonly", "yes" ]
