@@ -6,6 +6,7 @@ import (
 
 	"github.com/danhspe/fizz-buzz-rest-server/internal/layers/repositories"
 	"github.com/danhspe/fizz-buzz-rest-server/internal/models/arguments"
+	"github.com/danhspe/fizz-buzz-rest-server/internal/models/health"
 	"github.com/danhspe/fizz-buzz-rest-server/internal/storage/cache"
 )
 
@@ -19,6 +20,18 @@ var _ repositories.Statistics = (*statisticsRepository)(nil)
 
 func NewStatisticsRepository(cache cache.Cache) repositories.Statistics {
 	return &statisticsRepository{cache: cache}
+}
+
+func (s *statisticsRepository) Healthy() (string, error) {
+	return health.MessageHealthy, nil
+}
+
+func (s *statisticsRepository) Ready() (string, error) {
+	if err := s.cache.Connect(); err != nil {
+		log.Printf("Failed health check in statisticsRepository: %s\n", err.Error())
+		return health.MessageNotReady, err
+	}
+	return health.MessageReady, nil
 }
 
 func (s *statisticsRepository) HighestScore() (int, error) {
