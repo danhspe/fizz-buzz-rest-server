@@ -26,6 +26,24 @@ func NewFizzBuzzServiceServer(fizzBuzzUseCases usecases.FizzBuzz, statisticsUseC
 	return &grpcServer{fizzBuzzUseCases: fizzBuzzUseCases, statisticsUseCases: statisticsUseCases}
 }
 
+func (s *grpcServer) Healthy(ctx context.Context, empty *emptypb.Empty) (*fizzbuzz.HealthResponse, error) {
+	fizzBuzzMessage, errFizzBuzz := s.fizzBuzzUseCases.Healthy()
+	statisticsMessage, errStatistics := s.statisticsUseCases.Healthy()
+	if errFizzBuzz != nil || errStatistics != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("fizzBuzz: %s - statistics: %s", fizzBuzzMessage, statisticsMessage))
+	}
+	return &fizzbuzz.HealthResponse{Result: statisticsMessage}, nil
+}
+
+func (s *grpcServer) Ready(ctx context.Context, empty *emptypb.Empty) (*fizzbuzz.HealthResponse, error) {
+	fizzBuzzMessage, errFizzBuzz := s.fizzBuzzUseCases.Ready()
+	statisticsMessage, errStatistics := s.statisticsUseCases.Ready()
+	if errFizzBuzz != nil || errStatistics != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("fizzBuzz: %s - statistics: %s", fizzBuzzMessage, statisticsMessage))
+	}
+	return &fizzbuzz.HealthResponse{Result: statisticsMessage}, nil
+}
+
 func (s *grpcServer) GetFizzBuzz(ctx context.Context, request *fizzbuzz.FizzBuzzRequest) (*fizzbuzz.FizzBuzzResponse, error) {
 
 	args := arguments.New(int(request.Int1), int(request.Int2), int(request.Limit), request.Str1, request.Str2)

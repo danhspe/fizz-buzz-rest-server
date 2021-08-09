@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package health;
+
+option go_package = "github.com/danhspe/fizz-buzz-rest-server/golib/fizzbuzz";
+
+message HealthResponse {
+  string result = 1;
+}

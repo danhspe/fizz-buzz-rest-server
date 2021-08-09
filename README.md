@@ -13,7 +13,7 @@ The arguments will be cached for calculating statistics about the most frequent 
   curl localhost:8080/fizzbuzz -X POST -d '{ "int1": 3, "int2": 5, "limit": 15, "str1": "Fizz", "str2": "Buzz" }'
   ```
 
-  ```
+  ```json
   {
     "result": "1, 2, Fizz, 4, Buzz, Fizz, 7, 8, Fizz, Buzz, 11, Fizz, 13, 14, FizzBuzz"
   }
@@ -25,7 +25,7 @@ The arguments will be cached for calculating statistics about the most frequent 
   curl localhost:8080/statistics
   ```
 
-  ```
+  ```json
   {
     "highest_score": "1",
     "requests": [
@@ -37,6 +37,32 @@ The arguments will be cached for calculating statistics about the most frequent 
         "str2": "Buzz"
       }
     ]
+  }
+  ```
+
+### Health probes
+
+- GET /healthy
+
+  ```shell
+  curl localhost:8080/healthy
+  ```
+
+  ```json
+  {
+    "result": "ok"
+  }
+  ```
+
+- GET /ready
+
+  ```shell
+  curl localhost:8080/ready
+  ```
+
+  ```json
+  {
+    "result": "ok"
   }
   ```
 

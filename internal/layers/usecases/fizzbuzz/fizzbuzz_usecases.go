@@ -20,6 +20,14 @@ func NewFizzBuzzUseCase(repository repositories.FizzBuzzRepository) usecases.Fiz
 	return &fizzBuzzUseCase{repository: repository}
 }
 
+func (f *fizzBuzzUseCase) Healthy() (string, error) {
+	return f.repository.Healthy()
+}
+
+func (f *fizzBuzzUseCase) Ready() (string, error) {
+	return f.repository.Ready()
+}
+
 func (f *fizzBuzzUseCase) GetFizzBuzz(arguments arguments.Arguments) (string, error) {
 
 	result := fizzBuzz.FizzBuzz(arguments.Int1, arguments.Int2, arguments.Limit, arguments.Str1, arguments.Str2)

@@ -46,6 +46,22 @@ spec:
       containers:
         - name: fizz-buzz
           image: spelmezan/fizz-buzz-rest-server:0.1.0
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /healthy
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /ready
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 15
+            failureThreshold: 3
           resources:
             requests:
               cpu: "100m"

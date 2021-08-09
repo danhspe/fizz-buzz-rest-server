@@ -18,6 +18,14 @@ func NewStatisticsUseCases(statistics repositories.Statistics) usecases.Statisti
 	return &statisticsUseCases{statistics: statistics}
 }
 
+func (s *statisticsUseCases) Healthy() (string, error) {
+	return s.statistics.Healthy()
+}
+
+func (s *statisticsUseCases) Ready() (string, error) {
+	return s.statistics.Ready()
+}
+
 func (s *statisticsUseCases) GetStatistics() (highestScore int, mostFrequentArguments []arguments.Arguments, err error) {
 
 	highestScore, err = s.statistics.HighestScore()
