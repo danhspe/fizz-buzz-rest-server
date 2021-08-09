@@ -23,15 +23,15 @@ func NewStatisticsRepository(cache cache.Cache) repositories.Statistics {
 }
 
 func (s *statisticsRepository) Healthy() (string, error) {
-	return health.MessageHealthy, nil
+	return health.MessageOK, nil
 }
 
 func (s *statisticsRepository) Ready() (string, error) {
 	if err := s.cache.Connect(); err != nil {
 		log.Printf("Failed health check in statisticsRepository: %s\n", err.Error())
-		return health.MessageNotReady, err
+		return health.MessageFailed, err
 	}
-	return health.MessageReady, nil
+	return health.MessageOK, nil
 }
 
 func (s *statisticsRepository) HighestScore() (int, error) {

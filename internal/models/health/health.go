@@ -1,9 +1,8 @@
 package health
 
 var (
-	MessageHealthy  = "healthy"
-	MessageReady    = "ok"
-	MessageNotReady = "not ok"
+	MessageOK     = "ok"
+	MessageFailed = "failed"
 )
 
 type Health interface {
