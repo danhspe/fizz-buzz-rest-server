@@ -4,6 +4,7 @@ package statistics;
 
 option go_package = "github.com/danhspe/fizz-buzz-rest-server/golib/fizzbuzz";
 
+import "health.proto";
 import "fizzbuzz.proto";
 import "statistics.proto";
 import "google/api/annotations.proto";
@@ -21,6 +22,18 @@ service FizzBuzzService {
   rpc GetStatistics (google.protobuf.Empty) returns (statistics.StatisticsResponse) {
     option (google.api.http) = {
       get: "/statistics"
+    };
+  }
+
+  rpc Healthy (google.protobuf.Empty) returns (health.HealthResponse) {
+    option (google.api.http) = {
+      get: "/healthy"
+    };
+  }
+
+  rpc Ready (google.protobuf.Empty) returns (health.HealthResponse) {
+    option (google.api.http) = {
+      get: "/ready"
     };
   }
 
