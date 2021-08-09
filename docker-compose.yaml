@@ -3,7 +3,7 @@ version: "3.8"
 services:
   fizz-buzz:
     image: spelmezan/fizz-buzz-rest-server:0.1.0
-    command: [ "-redisEndpoint", "redis:6379", "-waitForRedis=true" ]
+    command: [ "-redisEndpoint", "redis:6379", "-waitForRedis=false" ]
     networks:
       fizz-buzz:
     ports:
