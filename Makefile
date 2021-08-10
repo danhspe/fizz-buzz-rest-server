@@ -4,7 +4,7 @@ IMPORTS=-I/usr/local/include -I$(GOPATH)/src -I$(GOPATH)/src/github.com/grpc-eco
 SOURCES=$(PROTO_DIR)/*.proto
 GW_SOURCES=$(PROTO_DIR)/*service.proto
 
-DOCKER_USER=spelmezan
+DOCKER_USER=danhspe
 IMAGE_NAME=fizz-buzz-rest-server
 TAG_NAME=0.1.0
 
