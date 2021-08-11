@@ -6,7 +6,7 @@ GW_SOURCES=$(PROTO_DIR)/*service.proto
 
 DOCKER_USER=danhspe
 IMAGE_NAME=fizz-buzz-rest-server
-TAG_NAME=0.1.0
+TAG_NAME=0.1.1
 
 DIR_BIN=bin
 DIR_GOLIB=golib
