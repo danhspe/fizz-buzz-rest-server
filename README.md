@@ -125,4 +125,6 @@ Run `kubectl delete -f deployment.yaml` to stop the server and Redis.
 
 Run `make all` to compile the protobuf files, generate the gRPC client/server code, and build the Go code.
 
-Run `make docker` to build and push the docker image to the docker hub.
+Run `make docker` to build and push the docker image, with the tag set in .env file, to the docker hub.
+
+Run `make docker FIZZ_BUZZ_TAG=x.y.z` to build and push the docker image with tag `x.y.z` to the docker hub.

@@ -4,9 +4,15 @@ IMPORTS=-I/usr/local/include -I$(GOPATH)/src -I$(GOPATH)/src/github.com/grpc-eco
 SOURCES=$(PROTO_DIR)/*.proto
 GW_SOURCES=$(PROTO_DIR)/*service.proto
 
-DOCKER_USER=spelmezan
+DOCKER_USER=danhspe
 IMAGE_NAME=fizz-buzz-rest-server
-TAG_NAME=0.1.0
+# get tag from environment variable
+ifneq (${FIZZ_BUZZ_TAG},)
+TAG_NAME=${FIZZ_BUZZ_TAG}
+else # get tag from .env file
+IMAGE_TAG_PREFIX='FIZZ_BUZZ_TAG='
+TAG_NAME=$(shell grep $(IMAGE_TAG_PREFIX) .env | sed 's/${IMAGE_TAG_PREFIX}//')
+endif
 
 DIR_BIN=bin
 DIR_GOLIB=golib
